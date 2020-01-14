@@ -1,0 +1,3 @@
+[submodule "submodules/share"]
+	path = submodules/share
+	url = https://github.com/MeetLog/meet-log-share/
