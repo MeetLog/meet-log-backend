@@ -1,8 +1,8 @@
 package io.github.meetlog.server.database.table
 
-import org.jetbrains.exposed.dao.UUIDTable
+import org.jetbrains.exposed.dao.IntIdTable
 
-object Users : UUIDTable() {
+object Users : IntIdTable() {
     val name = varchar("name", 30)
     val password = varchar("password", 60)
 

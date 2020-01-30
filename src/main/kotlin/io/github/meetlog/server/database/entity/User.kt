@@ -4,12 +4,11 @@ import io.github.meetlog.server.database.table.Accounts
 import io.github.meetlog.server.database.table.Users
 import io.ktor.auth.Principal
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
-import java.util.UUID
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
 
-class User(id: EntityID<UUID>): UUIDEntity(id), Principal {
-    companion object: UUIDEntityClass<User>(Users)
+class User(id: EntityID<Int>): IntEntity(id), Principal {
+    companion object: IntEntityClass<User>(Users)
 
     var name by Users.name
     var password by Users.password

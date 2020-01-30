@@ -1,9 +1,9 @@
 package io.github.meetlog.server.database.table
 
-import org.jetbrains.exposed.dao.LongIdTable
+import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Table
 
-object MeetSessions : LongIdTable() {
+object MeetSessions : IntIdTable() {
     val date = date("date")
     val place = varchar("place", 50)
 }
