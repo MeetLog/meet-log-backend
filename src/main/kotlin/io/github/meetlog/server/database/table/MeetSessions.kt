@@ -12,8 +12,3 @@ object MeetSessionUsers: Table() {
     val user = reference("user", Users).primaryKey(0)
     val session = reference("session", MeetSessions).primaryKey(1)
 }
-
-object MeetSessionLogs: Table() {
-    val session = reference("session", MeetSessions).primaryKey(0)
-    val log = reference("log", Logs).primaryKey(1)
-}

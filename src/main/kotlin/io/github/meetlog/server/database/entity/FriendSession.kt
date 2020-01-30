@@ -9,6 +9,6 @@ import org.jetbrains.exposed.dao.LongEntityClass
 class FriendSession(id: EntityID<Long>): LongEntity(id) {
     companion object: LongEntityClass<FriendSession>(FriendSessions)
 
-    val accounts by Account referrersOn FriendSessionAccounts.session
+    var accounts by Account via FriendSessionAccounts
     var session by MeetSession referencedOn FriendSessions.session
 }
