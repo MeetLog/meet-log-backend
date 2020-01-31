@@ -7,12 +7,12 @@ import io.github.meetlog.server.database.entity.FriendSession
 import io.github.meetlog.server.database.entity.User
 import io.github.meetlog.server.database.table.Accounts
 import io.github.meetlog.server.database.table.FriendSessions
+import io.github.meetlog.server.database.table.Logs
+import io.github.meetlog.server.database.table.MeetSessions
 import io.github.meetlog.server.database.table.Users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.UUID
 
 object DatabaseRepository {
     private lateinit var database: Database
@@ -32,8 +32,11 @@ object DatabaseRepository {
         val dataSource = HikariDataSource(hikariConfig)
         database = Database.connect(dataSource)
         SchemaUtils.create(
-            Users,
-            Accounts
+            Accounts,
+            FriendSessions,
+            Logs,
+            MeetSessions,
+            Users
         )
     }
 
@@ -42,7 +45,7 @@ object DatabaseRepository {
         password: String,
         nfcIdm: Long,
         iconUrl: String
-    ): UUID {
+    ): Int {
         val user = transaction(database) {
             User.new {
                 this.name = name
@@ -56,14 +59,16 @@ object DatabaseRepository {
     }
 
     fun getUser(id: String?): User? {
-        val uuid = try {
-            UUID.fromString(id)
-        }catch (ex: IllegalArgumentException) {
-            return null
-        }
+        val idInt = id?.let {
+            try {
+                it.toInt()
+            }catch (ex: NumberFormatException) {
+                return null
+            }
+        } ?: return null
 
         return transaction(database) {
-            User.findById(uuid)
+            User.findById(idInt)
         }
     }
 
