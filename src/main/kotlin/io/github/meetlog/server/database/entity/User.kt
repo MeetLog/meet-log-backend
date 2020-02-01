@@ -14,5 +14,5 @@ class User(id: EntityID<Int>): IntEntity(id), Principal {
     var password by Users.password
     var nfcIdm by Users.nfcIdm
     var iconUrl by Users.iconUrl
-    val accounts by Account referrersOn Accounts.user
+    val accounts by Account referrersOn  Accounts.user
 }

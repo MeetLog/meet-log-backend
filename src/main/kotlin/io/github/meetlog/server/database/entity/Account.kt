@@ -10,4 +10,5 @@ class Account(id: EntityID<Int>): IntEntity(id) {
 
     var snsType by Accounts.snsType
     var snsId by Accounts.snsId
+    var user by User referencedOn Accounts.user
 }

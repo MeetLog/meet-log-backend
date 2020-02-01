@@ -5,10 +5,18 @@ import org.jetbrains.exposed.sql.Table
 
 object MeetSessions : IntIdTable() {
     val date = date("date")
-    val place = varchar("place", 50)
+    val place = varchar("place", 50).nullable()
+    val startTime = datetime("start_time")
+    val endTime = reference("end_time", MeetSessionEndTimes)
 }
 
 object MeetSessionUsers: Table() {
     val user = reference("user", Users).primaryKey(0)
     val session = reference("session", MeetSessions).primaryKey(1)
+}
+
+object MeetSessionEndTimes: IntIdTable() {
+    val session = reference("session", MeetSessions)
+    val user = reference("user", Users)
+    val endTime = datetime("end")
 }

@@ -11,10 +11,12 @@ class Log(id: EntityID<Int>): IntEntity(id) {
 
     val imageUrls by Image referrersOn Images.log
     var comments by Logs.comments
+    var session by MeetSession referencedOn Logs.session
 }
 
 class Image(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<Image>(Images)
 
     var imageUrl by Images.imageUrl
+    var log by Log referencedOn Images.log
 }

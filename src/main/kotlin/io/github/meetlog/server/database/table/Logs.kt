@@ -4,7 +4,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 
 object Logs : IntIdTable() {
     val session = reference("session", MeetSessions)
-    val comments = varchar("comments", 800)
+    val comments = varchar("comments", 800).nullable()
 }
 
 object Images: IntIdTable() {
