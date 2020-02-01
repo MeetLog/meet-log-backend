@@ -19,7 +19,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(Ktor.server)
     implementation(Ktor.graphQl)
-    implementation(Ktor.auth)
     implementation(Ktor.jwt)
     implementation(Spring.crypto)
     implementation(KotlinX.serialization)
