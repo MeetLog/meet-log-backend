@@ -1,6 +1,5 @@
-package io.github.meetlog.server.route
+package io.github.meetlog.server.auth
 
-import io.github.meetlog.server.auth.JwtConfig
 import io.github.meetlog.server.database.DatabaseRepository
 import io.github.meetlog.server.database.entity.User
 import io.github.meetlog.server.util.matchPassword
