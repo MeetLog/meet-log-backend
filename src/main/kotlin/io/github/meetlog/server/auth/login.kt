@@ -1,7 +1,7 @@
 package io.github.meetlog.server.auth
 
 import io.github.meetlog.server.database.DatabaseRepository
-import io.github.meetlog.server.database.entity.User
+import io.github.meetlog.server.database.entity.UserEntity
 import io.github.meetlog.server.util.matchPassword
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -30,6 +30,6 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    val user: User,
+    val user: UserEntity,
     val token: String
 )

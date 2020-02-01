@@ -1,11 +1,11 @@
 package io.github.meetlog.server
 
 import io.github.meetlog.server.auth.JwtConfig
+import io.github.meetlog.server.auth.login
 import io.github.meetlog.server.config.DatabaseConfig
 import io.github.meetlog.server.config.loadConfig
 import io.github.meetlog.server.database.DatabaseRepository
 import io.github.meetlog.server.graphql.graphQlSchema
-import io.github.meetlog.server.auth.login
 import io.ktor.application.install
 import io.ktor.auth.authenticate
 import io.ktor.auth.authentication

@@ -3,18 +3,18 @@ package io.github.meetlog.server.database
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.github.meetlog.server.config.DatabaseConfig
-import io.github.meetlog.server.database.entity.Account
-import io.github.meetlog.server.database.entity.FriendSession
-import io.github.meetlog.server.database.entity.Image
-import io.github.meetlog.server.database.entity.Log
-import io.github.meetlog.server.database.entity.MeetSession
-import io.github.meetlog.server.database.entity.MeetSessionEndTime
-import io.github.meetlog.server.database.entity.User
-import io.github.meetlog.server.database.table.Accounts
-import io.github.meetlog.server.database.table.FriendSessions
-import io.github.meetlog.server.database.table.Logs
-import io.github.meetlog.server.database.table.MeetSessions
-import io.github.meetlog.server.database.table.Users
+import io.github.meetlog.server.database.entity.AccountEntity
+import io.github.meetlog.server.database.entity.FriendSessionEntity
+import io.github.meetlog.server.database.entity.ImageEntity
+import io.github.meetlog.server.database.entity.LogEntity
+import io.github.meetlog.server.database.entity.MeetSessionEntity
+import io.github.meetlog.server.database.entity.MeetSessionEndTimeEntity
+import io.github.meetlog.server.database.entity.UserEntity
+import io.github.meetlog.server.database.table.AccountsTable
+import io.github.meetlog.server.database.table.FriendSessionsTable
+import io.github.meetlog.server.database.table.LogsTable
+import io.github.meetlog.server.database.table.MeetSessionsTable
+import io.github.meetlog.server.database.table.UsersTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.sql.Database
@@ -42,11 +42,11 @@ object DatabaseRepository {
         val dataSource = HikariDataSource(hikariConfig)
         database = Database.connect(dataSource)
         SchemaUtils.create(
-            Accounts,
-            FriendSessions,
-            Logs,
-            MeetSessions,
-            Users
+            AccountsTable,
+            FriendSessionsTable,
+            LogsTable,
+            MeetSessionsTable,
+            UsersTable
         )
     }
 
@@ -57,7 +57,7 @@ object DatabaseRepository {
         iconUrl: String
     ): Int {
         val user = transaction {
-            User.new {
+            UserEntity.new {
                 this.name = name
                 this.password = password
                 this.nfcIdm = nfcIdm
@@ -68,32 +68,32 @@ object DatabaseRepository {
         return user.id.value
     }
 
-    fun getUser(id: String?): User? {
-        return get(id, User)
+    fun getUser(id: String?): UserEntity? {
+        return get(id, UserEntity)
     }
 
     fun getFriendSession(
         myId: String,
         friendsId: String,
         meetSessionId: String
-    ): FriendSession? {
+    ): FriendSessionEntity? {
         return transaction {
             val me = getUser(myId) ?: return@transaction null
             val friend = getUser(friendsId) ?: return@transaction null
 
-            val meetSession = get(meetSessionId, MeetSession) ?: return@transaction null
+            val meetSession = get(meetSessionId, MeetSessionEntity) ?: return@transaction null
 
             val session = transaction {
-                FriendSession.find {
-                    (FriendSessions.session eq meetSession.id)
-                        .and(FriendSessions.me eq me.id)
-                        .and(FriendSessions.friend eq friend.id)
+                FriendSessionEntity.find {
+                    (FriendSessionsTable.session eq meetSession.id)
+                        .and(FriendSessionsTable.me eq me.id)
+                        .and(FriendSessionsTable.friend eq friend.id)
                 }
             }.singleOrNull()
 
             if(session != null) return@transaction session
 
-            FriendSession.new {
+            FriendSessionEntity.new {
                 this.me = me
                 this.friend = friend
                 this.session = meetSession
@@ -104,9 +104,9 @@ object DatabaseRepository {
     fun removeAccount(
         myId: String,
         accountId: String
-    ): User? {
+    ): UserEntity? {
         return transaction{
-            val account = get(accountId, Account) ?: return@transaction null
+            val account = get(accountId, AccountEntity) ?: return@transaction null
 
             val me = getUser(myId) ?: return@transaction null
             return@transaction if(me.accounts.contains(account)) {
@@ -122,11 +122,11 @@ object DatabaseRepository {
         myId: String,
         date: String,
         place: String?
-    ): MeetSession? {
+    ): MeetSessionEntity? {
         return transaction {
             val me = getUser(myId) ?: return@transaction null
 
-            MeetSession.new {
+            MeetSessionEntity.new {
                 this.date = DateTime.parse(date)
                 this.place = place
                 this.participants = SizedCollection(me)
@@ -138,13 +138,13 @@ object DatabaseRepository {
         myId: String,
         friendsId: String,
         meetSessionId: String
-    ): FriendSession? {
+    ): FriendSessionEntity? {
         return transaction {
             val me = getUser(myId) ?: return@transaction null
             val friend = getUser(friendsId) ?: return@transaction null
-            val meetSession = get(meetSessionId, MeetSession) ?: return@transaction null
+            val meetSession = get(meetSessionId, MeetSessionEntity) ?: return@transaction null
 
-            FriendSession.new {
+            FriendSessionEntity.new {
                 this.session = meetSession
                 this.me = me
                 this.friend = friend
@@ -156,11 +156,11 @@ object DatabaseRepository {
         userId: String,
         snsType: String,
         snsId: String
-    ): Account? {
+    ): AccountEntity? {
         return transaction {
             val user = getUser(userId) ?: return@transaction null
 
-            Account.new {
+            AccountEntity.new {
                 this.snsType = snsType
                 this.snsId = snsId
                 this.user = user
@@ -172,11 +172,11 @@ object DatabaseRepository {
         sessionId: String,
         comments: String?,
         images: List<String>?
-    ): Log? {
+    ): LogEntity? {
         val log = transaction {
-            val session = get(sessionId, MeetSession) ?: return@transaction null
+            val session = get(sessionId, MeetSessionEntity) ?: return@transaction null
 
-            Log.new {
+            LogEntity.new {
                 this.session = session
                 this.comments = comments
             }
@@ -185,7 +185,7 @@ object DatabaseRepository {
         if(images != null) {
             transaction {
                 for(image in images) {
-                    Image.new {
+                    ImageEntity.new {
                         this.imageUrl = image
                         this.log = log
                     }
@@ -202,11 +202,11 @@ object DatabaseRepository {
         endTime: String
     ): Boolean {
         return transaction {
-            val meetSession = get(meetSessionId, MeetSession) ?: return@transaction false
+            val meetSession = get(meetSessionId, MeetSessionEntity) ?: return@transaction false
             val me = getUser(myId) ?: return@transaction false
             val time = DateTime.parse(endTime)
 
-            MeetSessionEndTime.new {
+            MeetSessionEndTimeEntity.new {
                 this.user = me
                 this.session = session
                 this.endTime = time

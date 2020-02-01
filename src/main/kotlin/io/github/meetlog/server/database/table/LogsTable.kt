@@ -2,12 +2,12 @@ package io.github.meetlog.server.database.table
 
 import org.jetbrains.exposed.dao.IntIdTable
 
-object Logs : IntIdTable() {
-    val session = reference("session", MeetSessions)
+object LogsTable : IntIdTable() {
+    val session = reference("session", MeetSessionsTable)
     val comments = varchar("comments", 800).nullable()
 }
 
-object Images: IntIdTable() {
+object ImagesTable: IntIdTable() {
     val imageUrl = varchar("image_url", 2000)
-    val log = reference("log", Logs)
+    val log = reference("log", LogsTable)
 }

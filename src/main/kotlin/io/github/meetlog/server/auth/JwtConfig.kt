@@ -3,7 +3,7 @@ package io.github.meetlog.server.auth
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import io.github.meetlog.server.database.entity.User
+import io.github.meetlog.server.database.entity.UserEntity
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -17,7 +17,7 @@ object JwtConfig {
         .withIssuer(issuer)
         .build()
 
-    fun makeToken(user: User): String  = JWT.create()
+    fun makeToken(user: UserEntity): String  = JWT.create()
         .withSubject("Authentication")
         .withIssuer(issuer)
         .withExpiresAt(getExpiration())
