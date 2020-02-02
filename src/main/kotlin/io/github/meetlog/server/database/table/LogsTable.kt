@@ -7,7 +7,7 @@ object LogsTable : IntIdTable() {
     val comments = varchar("comments", 800).nullable()
 }
 
-object ImagesTable: IntIdTable() {
+object ImagesTable : IntIdTable() {
     val imageUrl = varchar("image_url", 2000)
     val log = reference("log", LogsTable)
 }

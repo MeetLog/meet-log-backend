@@ -8,8 +8,8 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 
-class MeetSessionEntity(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<MeetSessionEntity>(MeetSessionsTable)
+class MeetSessionEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<MeetSessionEntity>(MeetSessionsTable)
 
     var participants by UserEntity via MeetSessionUsersTable
     var date by MeetSessionsTable.date
@@ -19,8 +19,8 @@ class MeetSessionEntity(id: EntityID<Int>): IntEntity(id) {
     val logs by LogEntity referrersOn LogsTable.session
 }
 
-class MeetSessionEndTimeEntity(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<MeetSessionEndTimeEntity>(MeetSessionEndTimesTable)
+class MeetSessionEndTimeEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<MeetSessionEndTimeEntity>(MeetSessionEndTimesTable)
 
     var session by MeetSessionEntity referencedOn MeetSessionEndTimesTable.session
     var user by UserEntity referencedOn MeetSessionEndTimesTable.user

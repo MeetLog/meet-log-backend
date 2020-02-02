@@ -17,7 +17,7 @@ object JwtConfig {
         .withIssuer(issuer)
         .build()
 
-    fun makeToken(user: UserEntity): String  = JWT.create()
+    fun makeToken(user: UserEntity): String = JWT.create()
         .withSubject("Authentication")
         .withIssuer(issuer)
         .withExpiresAt(getExpiration())

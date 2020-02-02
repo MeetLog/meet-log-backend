@@ -7,8 +7,8 @@ import io.github.meetlog.server.database.entity.AccountEntity
 import io.github.meetlog.server.database.entity.FriendSessionEntity
 import io.github.meetlog.server.database.entity.ImageEntity
 import io.github.meetlog.server.database.entity.LogEntity
-import io.github.meetlog.server.database.entity.MeetSessionEntity
 import io.github.meetlog.server.database.entity.MeetSessionEndTimeEntity
+import io.github.meetlog.server.database.entity.MeetSessionEntity
 import io.github.meetlog.server.database.entity.UserEntity
 import io.github.meetlog.server.database.table.AccountsTable
 import io.github.meetlog.server.database.table.FriendSessionsTable
@@ -91,7 +91,7 @@ object DatabaseRepository {
                 }
             }.singleOrNull()
 
-            if(session != null) return@transaction session
+            if (session != null) return@transaction session
 
             FriendSessionEntity.new {
                 this.me = me
@@ -105,14 +105,14 @@ object DatabaseRepository {
         myId: String,
         accountId: String
     ): UserEntity? {
-        return transaction{
+        return transaction {
             val account = get(accountId, AccountEntity) ?: return@transaction null
 
             val me = getUser(myId) ?: return@transaction null
-            return@transaction if(me.accounts.contains(account)) {
+            return@transaction if (me.accounts.contains(account)) {
                 account.delete()
                 me
-            }else{
+            } else {
                 null
             }
         }
@@ -182,9 +182,9 @@ object DatabaseRepository {
             }
         } ?: return null
 
-        if(images != null) {
+        if (images != null) {
             transaction {
-                for(image in images) {
+                for (image in images) {
                     ImageEntity.new {
                         this.imageUrl = image
                         this.log = log
@@ -216,11 +216,11 @@ object DatabaseRepository {
         }
     }
 
-    private fun <T: Entity<Int>> get(id: String?, entity: EntityClass<Int, T>): T? {
+    private fun <T : Entity<Int>> get(id: String?, entity: EntityClass<Int, T>): T? {
         val idInt = id?.let {
             try {
                 it.toInt()
-            }catch (ex: NumberFormatException) {
+            } catch (ex: NumberFormatException) {
                 return null
             }
         } ?: return null

@@ -10,12 +10,12 @@ object MeetSessionsTable : IntIdTable() {
     val endTime = reference("end_time", MeetSessionEndTimesTable)
 }
 
-object MeetSessionUsersTable: Table() {
+object MeetSessionUsersTable : Table() {
     val user = reference("user", UsersTable).primaryKey(0)
     val session = reference("session", MeetSessionsTable).primaryKey(1)
 }
 
-object MeetSessionEndTimesTable: IntIdTable() {
+object MeetSessionEndTimesTable : IntIdTable() {
     val session = reference("session", MeetSessionsTable)
     val user = reference("user", UsersTable)
     val endTime = datetime("end")

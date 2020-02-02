@@ -5,8 +5,8 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 
-class FriendSessionEntity(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<FriendSessionEntity>(FriendSessionsTable)
+class FriendSessionEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<FriendSessionEntity>(FriendSessionsTable)
 
     var me by UserEntity referencedOn FriendSessionsTable.me
     var friend by UserEntity referencedOn FriendSessionsTable.friend

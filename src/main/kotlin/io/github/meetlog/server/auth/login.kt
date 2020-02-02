@@ -15,10 +15,10 @@ fun Route.login() {
         val req = call.receive<LoginRequest>()
         val user = DatabaseRepository.getUser(req.id)
 
-        if(user != null && req.password.matchPassword(user.password)) {
+        if (user != null && req.password.matchPassword(user.password)) {
             val token = JwtConfig.makeToken(user)
             call.respond(LoginResponse(user, token))
-        }else{
+        } else {
             call.respond(HttpStatusCode.Unauthorized)
         }
     }
