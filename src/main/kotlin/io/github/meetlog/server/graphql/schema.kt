@@ -12,17 +12,60 @@ private val parser = SchemaParser()
 
 fun schemaDef(path: Path): TypeDefinitionRegistry = parser.parse(Files.newBufferedReader(path))
 
-private val handler = GraphQlHandler()
 val runtimeWiring = RuntimeWiring {
+    val handler = GraphQlHandler()
+
     type("Query") {
         dataFetcher("getSession") {
-            val args = it.arguments
+            val myId: String by arguments
+            val friendsId: String by arguments
+            val meetSessionId: String by arguments
 
-            val token: String by args
-            val friendsId: String by args
-            val meetSessionId: String by args
+            handler.getSession(myId, friendsId, meetSessionId)
+        }
+    }
+    type("Mutation") {
+        dataFetcher("removeAccount") {
+            val userId: String by arguments
+            val accountId: String by arguments
 
-            TODO() //handler.getSession(token, friendsId, meetSessionId)
+            handler.removeAccount(userId, accountId)
+        }
+        dataFetcher("createGroupSession") {
+            val myId: String by arguments
+            val date: String by arguments
+            val place: String? by arguments
+
+            handler.createGroupSession(myId, date, place)
+        }
+        dataFetcher("connectAccount") {
+            val myId: String by arguments
+            val friendsId: String by arguments
+            val meetSession: String by arguments
+
+            handler.connectAccount(myId, friendsId, meetSession)
+        }
+        dataFetcher("addAccount") {
+            val userId: String by arguments
+            val snsType: String by arguments
+            val snsId: String by arguments
+
+            handler.addAccount(userId, snsType, snsId)
+        }
+        dataFetcher("postLog") {
+            val sessionId: String by arguments
+            val comments: String? by arguments
+            val images: List<String>? by arguments
+
+            handler.postLog(sessionId, comments, images)
+        }
+        dataFetcher("leaveMeetSession") {
+            val meetSessionId: String by arguments
+            val myId: String by arguments
+            val endTime: String by arguments
+
+            handler.leaveMeetSession(meetSessionId, myId, endTime)
+            true
         }
     }
 }

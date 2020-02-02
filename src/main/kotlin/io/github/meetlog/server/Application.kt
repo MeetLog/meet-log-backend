@@ -5,6 +5,7 @@ import io.github.meetlog.server.auth.login
 import io.github.meetlog.server.config.DatabaseConfig
 import io.github.meetlog.server.config.loadConfig
 import io.github.meetlog.server.database.DatabaseRepository
+import io.github.meetlog.server.graphql.formatErrorGraphQlError
 import io.github.meetlog.server.graphql.graphQlSchema
 import io.ktor.application.install
 import io.ktor.auth.authenticate
@@ -46,6 +47,7 @@ fun main() {
                 graphQL("graphql", graphQlSchema) {
                     config {
                         // graphiql = true
+                        this.formatError = formatErrorGraphQlError
                     }
                 }
             }
