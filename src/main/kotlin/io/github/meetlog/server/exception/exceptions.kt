@@ -12,8 +12,7 @@ class GraphQlClientException: GraphQlException {
     constructor(message: String? = null, cause: Throwable): super(message, cause)
 }
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun clientError(message: String? = null, cause: Throwable? = null): Nothing {
+fun clientError(message: String? = null, cause: Throwable? = null): Nothing {
     if(cause != null) throw GraphQlClientException(message, cause)
     else throw GraphQlClientException(message)
 }
