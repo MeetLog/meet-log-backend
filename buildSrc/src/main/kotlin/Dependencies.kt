@@ -4,7 +4,7 @@
  * バージョン管理
  */
 object Ver {
-    const val kotlin = "1.3.61"
+    const val kotlin = "1.3.70"
 }
 
 /**

@@ -72,6 +72,6 @@ val runtimeWiring = RuntimeWiring {
 
 val graphQlSchema: GraphQLSchema = SchemaGenerator().makeExecutableSchema(
     schemaDef(
-        Paths.get("")
+        Paths.get("schema.gql")
     ), runtimeWiring
 ) // TODO set path
