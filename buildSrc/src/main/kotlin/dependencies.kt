@@ -23,6 +23,7 @@ object Ktor {
     const val server = "io.ktor:ktor-server-netty:$version"
     const val tests = "io.ktor:ktor-server-tests:$version"
     const val jwt = "io.ktor:ktor-auth-jwt:$version"
+    const val serialization = "io.ktor:ktor-serialization:$version"
     const val graphQl = "com.github.excitement-engineer:ktor-graphql:$graphQlVersion"
 }
 

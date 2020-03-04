@@ -2,6 +2,7 @@ package io.github.meetlog.server
 
 import io.github.meetlog.server.auth.JwtConfig
 import io.github.meetlog.server.auth.login
+import io.github.meetlog.server.auth.register
 import io.github.meetlog.server.config.DatabaseConfig
 import io.github.meetlog.server.config.loadConfig
 import io.github.meetlog.server.database.DatabaseRepository
@@ -14,6 +15,7 @@ import io.ktor.auth.jwt.jwt
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.routing.routing
+import io.ktor.serialization.serialization
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import ktor.graphql.config
@@ -25,7 +27,9 @@ fun main() {
 
     val server = embeddedServer(Netty, 8080) {
         install(CallLogging)
-        install(ContentNegotiation) { /* serialization */ }
+        install(ContentNegotiation) {
+            serialization()
+        }
 
         authentication {
             jwt {
@@ -41,6 +45,7 @@ fun main() {
 
         routing {
             login()
+            register()
 
             // authenticateブロック内はトークンによる認証が必要
             authenticate {

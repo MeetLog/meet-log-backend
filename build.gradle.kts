@@ -19,6 +19,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(Ktor.server)
     implementation(Ktor.graphQl)
+    implementation(Ktor.serialization)
     implementation(Ktor.jwt)
     implementation(Spring.crypto)
     implementation(KotlinX.serialization)
@@ -28,6 +29,7 @@ dependencies {
     implementation(Config.snakeYaml)
 
     testImplementation(Ktor.tests)
+    testImplementation(kotlin("test-junit5"))
 }
 
 tasks.withType<KotlinCompile> {

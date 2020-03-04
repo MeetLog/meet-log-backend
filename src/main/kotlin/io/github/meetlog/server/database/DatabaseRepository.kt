@@ -54,7 +54,7 @@ object DatabaseRepository {
         name: String,
         password: String,
         nfcIdm: Long,
-        iconUrl: String
+        iconUrl: String?
     ): Int {
         val user = transaction {
             UserEntity.new {
