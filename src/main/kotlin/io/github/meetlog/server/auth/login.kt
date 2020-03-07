@@ -8,6 +8,7 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,6 +23,7 @@ data class LoginUser(
 data class RegisterRequest(
     val name: String,
     val password: String,
+    @SerialName("icon_url")
     val iconUrl: String?,
     val nfcIdm: Long
 )

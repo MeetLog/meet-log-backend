@@ -2,7 +2,6 @@ package io.github.meetlog.server.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.github.meetlog.server.config.DatabaseConfig
 import io.github.meetlog.server.database.entity.AccountEntity
 import io.github.meetlog.server.database.entity.FriendSessionEntity
 import io.github.meetlog.server.database.entity.ImageEntity
@@ -15,6 +14,7 @@ import io.github.meetlog.server.database.table.FriendSessionsTable
 import io.github.meetlog.server.database.table.LogsTable
 import io.github.meetlog.server.database.table.MeetSessionsTable
 import io.github.meetlog.server.database.table.UsersTable
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.sql.Database
@@ -27,27 +27,29 @@ import org.joda.time.DateTime
 object DatabaseRepository {
     private lateinit var database: Database
 
-    fun init(config: DatabaseConfig) {
-        val hikariConfig = HikariConfig().apply {
-            driverClassName = "com.mysql.cj.jdbc.Driver"
-            jdbcUrl = "jdbc:mysql://${config.host}:${config.port}/${config.dataBaseName}"
-            username = config.user
-            password = config.password
-
-            addDataSourceProperty("cachePrepStmts", "true")
-            addDataSourceProperty("prepStmtCacheSize", "250")
-            addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
-        }
-
-        val dataSource = HikariDataSource(hikariConfig)
+    fun init(config: HikariConfig) {
+        val dataSource = HikariDataSource(config)
         database = Database.connect(dataSource)
-        SchemaUtils.create(
-            AccountsTable,
-            FriendSessionsTable,
-            LogsTable,
-            MeetSessionsTable,
-            UsersTable
-        )
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(
+                AccountsTable,
+                FriendSessionsTable,
+                LogsTable,
+                MeetSessionsTable,
+                UsersTable
+            )
+        }
+    }
+
+    @TestOnly
+    fun pruneAll() {
+        AccountEntity.all().forEach { it.delete() }
+        FriendSessionEntity.all().forEach { it.delete() }
+        LogEntity.all().forEach { it.delete() }
+        ImageEntity.all().forEach { it.delete() }
+        MeetSessionEntity.all().forEach { it.delete() }
+        MeetSessionEndTimeEntity.all().forEach { it.delete() }
+        UserEntity.all().forEach { it.delete() }
     }
 
     fun registerUser(
@@ -210,6 +212,7 @@ object DatabaseRepository {
                 this.user = me
                 this.session = session
                 this.endTime = time
+                this.session = meetSession
             }
 
             return@transaction true

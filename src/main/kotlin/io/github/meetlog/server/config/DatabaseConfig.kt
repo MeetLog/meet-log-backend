@@ -1,9 +1,9 @@
 package io.github.meetlog.server.config
 
-data class DatabaseConfig(
-    val user: String,
-    val password: String,
-    val host: String,
-    val port: Int,
-    val dataBaseName: String
-)
+class DatabaseConfig {
+    var user: String = "root"
+    var password: String = "root"
+    var host: String = "localhost"
+    var port: Int = 3306
+    var dataBaseName = "meetlog"
+}

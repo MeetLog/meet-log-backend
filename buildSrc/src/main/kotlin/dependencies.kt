@@ -63,10 +63,14 @@ object Sql {
     const val exposedVersion = "0.17.7"
     const val hikariCpVersion = "3.4.2"
     const val mySqlVersion = "8.0.18"
+    const val h2Version = "1.4.200"
 
     const val exposed = "org.jetbrains.exposed:exposed:$exposedVersion"
     const val hikariCp = "com.zaxxer:HikariCP:$hikariCpVersion"
     const val mySql = "mysql:mysql-connector-java:$mySqlVersion"
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    const val h2 = "com.h2database:h2:$h2Version"
+
 }
 
 /**

@@ -1,5 +1,6 @@
 package io.github.meetlog.server
 
+import com.zaxxer.hikari.HikariConfig
 import io.github.meetlog.server.auth.JwtConfig
 import io.github.meetlog.server.auth.login
 import io.github.meetlog.server.auth.register
@@ -21,9 +22,22 @@ import io.ktor.server.netty.Netty
 import ktor.graphql.config
 import ktor.graphql.graphQL
 
+fun dbConfig(): HikariConfig {
+    val config = loadConfig<DatabaseConfig>("dbConfig.yml")
+    return HikariConfig().apply {
+        driverClassName = "com.mysql.cj.jdbc.Driver"
+        jdbcUrl = "jdbc:mysql://${config.host}:${config.port}/${config.dataBaseName}?serverTimezone=JST"
+        username = config.user
+        password = config.password
+
+        addDataSourceProperty("cachePrepStmts", "true")
+        addDataSourceProperty("prepStmtCacheSize", "250")
+        addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
+    }
+}
+
 fun main() {
-    val databaseConfig = loadConfig<DatabaseConfig>("dbConfig.yml")
-    DatabaseRepository.init(databaseConfig)
+    DatabaseRepository.init(dbConfig())
 
     val server = embeddedServer(Netty, 8080) {
         install(CallLogging)
